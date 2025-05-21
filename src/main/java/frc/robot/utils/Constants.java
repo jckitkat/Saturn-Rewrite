@@ -17,7 +17,7 @@ public class Constants {
         public static final Translation2d blueSpeaker = new Translation2d(0, 5.5);
         public static final Translation2d redSpeaker = new Translation2d(16.5, 5.5);
         public static final Translation2d bluePassZone = new Translation2d();
-        public static final Translation2d redPassZone = new Translation2d();   
+        public static final Translation2d redPassZone = new Translation2d();
     }
 
     public static class IO {
@@ -38,19 +38,21 @@ public class Constants {
         public static final int prepareAmpButton = 8;
         public static final int shootButton = 7;
         public static final int resetSuperstructureButton = 10;
-        
+
     }
 
     public static class Swerve {
         public static final File directory = new File(Filesystem.getDeployDirectory(), "swerve");
         public static final double maxVelocity = 50;
-        public static final double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6.12, 1);
-        public static final double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(21.4285714285714, 1);
+        public static final double driveConversionFactor = SwerveMath
+                .calculateMetersPerRotation(Units.inchesToMeters(4), 6.12, 1);
+        public static final double angleConversionFactor = SwerveMath
+                .calculateDegreesPerSteeringRotation(21.4285714285714, 1);
     }
 
     public static class Intake {
-        public static final int positionLeftCANID = 13;
-        public static final int positionRightCANID = 20;
+        public static final int leftPivotID = 13;
+        public static final int rightPivotID = 20;
         public static final int rollerCANID = 14;
 
         // public static final double conversionFactor = 0.19047619;
@@ -72,6 +74,8 @@ public class Constants {
         public static final double defaultPosition = 1;
 
         public static final double sensorThreshhold = 50;
+
+        public static final double pivotTolerance = 0.01;
     }
 
     public static class Elevator {
@@ -94,7 +98,6 @@ public class Constants {
         public static final int topCANID = 19;
         public static final int bottomCANID = 18;
         public static final int rotationCANID = 16;
-
 
         public static final double topP = 0;
         public static final double topI = 0;
@@ -130,7 +133,8 @@ public class Constants {
     }
 
     public static class Sensors {
-        public static final Transform3d cameraToRobot = new Transform3d(new Translation3d(-.298, 0, -.205), new Rotation3d(0.0, 45.0, 0.0));
+        public static final Transform3d cameraToRobot = new Transform3d(new Translation3d(-.298, 0, -.205),
+                new Rotation3d(0.0, 45.0, 0.0));
     }
 
     public static class Climber {

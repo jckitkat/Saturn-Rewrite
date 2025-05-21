@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.Drivetrain;
 // import frc.robot.subsystems.Shooter;
 // import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Intake;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
@@ -27,6 +28,8 @@ public class Robot extends TimedRobot {
     private Command currentDriveMode = Commands.none();
     private Command previousMode = Commands.none();
     private Command previousDriveMode = Commands.none();
+
+    public static Intake intake = new Intake();
 
     @Override
     public void robotInit() {
