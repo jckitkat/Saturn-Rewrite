@@ -75,8 +75,10 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean areEncodersSynced() {
-        return leftPivotMotor.getPosition().getValueAsDouble() < (absoluteEncoder.get() - 0.05)
-                || leftPivotMotor.getPosition().getValueAsDouble() > (absoluteEncoder.get() + 0.05);
+        return leftPivotMotor.getPosition()
+                .getValueAsDouble() < (absoluteEncoder.get() - Constants.Sensors.encoderTolerance)
+                || leftPivotMotor.getPosition()
+                        .getValueAsDouble() > (absoluteEncoder.get() + Constants.Sensors.encoderTolerance);
     }
 
     public void setRollerSpeed(double speed) {

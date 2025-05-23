@@ -4,16 +4,23 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 
 public class Shooter extends SubsystemBase {
+
+    private double targetPosition = 0;
+    private double targetShootVelocity = 0;
+    private double targetFeedSpeed = 0;
 
     private final TalonFX shooterTop, shooterBottom, feeder;
     private final TalonFXConfiguration shooterTopConfig, shooterBottomConfig, feederConfig;
@@ -105,6 +112,10 @@ public class Shooter extends SubsystemBase {
         positionMotionMagicConfig.MotionMagicCruiseVelocity = Constants.Shooter.maxVel;
         positionMotionMagicConfig.MotionMagicAcceleration = Constants.Shooter.maxAcc;
 
+        positionMotor.getConfigurator().apply(positionMotorConfig);
+        positionMotor.getConfigurator().apply(positionSlot0Config);
+        positionMotor.getConfigurator().apply(positionMotionMagicConfig);
+
         absoluteEncoder = new DutyCycleEncoder(2, 1, 0.25);
 
     }
@@ -117,8 +128,40 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean areEncodersSynced() {
-        return positionMotor.getPosition().getValueAsDouble() < (absoluteEncoder.get() - 0.05)
-                || positionMotor.getPosition().getValueAsDouble() > (absoluteEncoder.get() + 0.05);
+        return positionMotor.getPosition()
+                .getValueAsDouble() < (absoluteEncoder.get() - Constants.Sensors.encoderTolerance)
+                || positionMotor.getPosition()
+                        .getValueAsDouble() > (absoluteEncoder.get() + Constants.Sensors.encoderTolerance);
+    }
+
+    public void setPosition(double position) {
+        positionMotor.setControl(new MotionMagicVoltage(position));
+        targetPosition = position;
+    }
+
+    public void setShootSpeed(double shootSpeed) {
+        shooterTop.setControl(new MotionMagicVelocityVoltage(shootSpeed));
+        shooterBottom.setControl(new MotionMagicVelocityVoltage(shootSpeed));
+        targetShootVelocity = shootSpeed;
+    }
+
+    public void setFeederSpeed(double feedSpeed) {
+        feeder.setControl(new MotionMagicVelocityVoltage(feedSpeed));
+        targetFeedSpeed = feedSpeed;
+    }
+
+    public boolean hasGamePiece() {
+        return !digitalSensor.get();
+    }
+
+    public boolean isAtPosition() {
+        return MathUtil.isNear(targetPosition, positionMotor.getPosition().getValueAsDouble(),
+                Constants.Shooter.positionTolerance);
+    }
+
+    public boolean areFlywheelsAtSpeed() {
+        return MathUtil.isNear(targetShootVelocity, shooterTop.getVelocity().getValueAsDouble(), 0.05)
+                && MathUtil.isNear(targetShootVelocity, shooterBottom.getVelocity().getValueAsDouble(), 0.05);
     }
 
 }

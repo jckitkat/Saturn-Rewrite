@@ -97,7 +97,7 @@ public class Constants {
         public static final int feederCANID = 17;
         public static final int topCANID = 19;
         public static final int bottomCANID = 18;
-        public static final int rotationCANID = 16;
+        public static final int positionCANID = 16;
 
         public static final double topP = 0;
         public static final double topI = 0;
@@ -139,11 +139,15 @@ public class Constants {
 
         public static final double feederMaxVel = 100;
         public static final double feederMaxAccel = 200;
+
+        public static final double positionTolerance = 0.02;
     }
 
     public static class Sensors {
         public static final Transform3d cameraToRobot = new Transform3d(new Translation3d(-.298, 0, -.205),
                 new Rotation3d(0.0, 45.0, 0.0));
+
+        public static final double encoderTolerance = 0.0005;
     }
 
     public static class Climber {
