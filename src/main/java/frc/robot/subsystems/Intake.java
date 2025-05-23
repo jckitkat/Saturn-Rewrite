@@ -12,6 +12,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
@@ -26,6 +28,9 @@ public class Intake extends SubsystemBase {
     private final Slot0Configs pivotPID;
     private final MotionMagicConfigs pivotMotionMagicConfig;
     private final DutyCycleEncoder absoluteEncoder;
+
+    private final AnalogInput analogSensor = new AnalogInput(3);
+    private final DigitalInput digitalSensor = new DigitalInput(3);
 
     public Intake() {
         leftPivotMotor = new TalonFX(Constants.Intake.leftPivotID);
@@ -89,6 +94,10 @@ public class Intake extends SubsystemBase {
 
     public double getPivotPosition() {
         return leftPivotMotor.getPosition().getValueAsDouble();
+    }
+
+    public boolean hasGamePiece() {
+        return (analogSensor.getValue() > 2700) || !digitalSensor.get();
     }
 
 }

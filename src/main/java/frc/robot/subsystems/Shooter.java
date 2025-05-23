@@ -1,0 +1,124 @@
+package frc.robot.subsystems;
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.Constants;
+
+public class Shooter extends SubsystemBase {
+
+    private final TalonFX shooterTop, shooterBottom, feeder;
+    private final TalonFXConfiguration shooterTopConfig, shooterBottomConfig, feederConfig;
+
+    private final TalonFX positionMotor;
+    private final TalonFXConfiguration positionMotorConfig;
+
+    private final MotionMagicConfigs positionMotionMagicConfig, topMotionMagicConfig, BottomMotionMagicConfig,
+            feederMotionMagicConfig;
+    private final Slot0Configs topSlot0Config, bottomSlot0Config, positionSlot0Config, feederSlot0Config;
+
+    private final DutyCycleEncoder absoluteEncoder;
+
+    private final DigitalInput digitalSensor = new DigitalInput(0);
+
+    public Shooter() {
+        shooterTop = new TalonFX(Constants.Shooter.topCANID);
+        shooterBottom = new TalonFX(Constants.Shooter.bottomCANID);
+
+        shooterTopConfig = new TalonFXConfiguration();
+        shooterTopConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        shooterTopConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+        topMotionMagicConfig = new MotionMagicConfigs();
+        topMotionMagicConfig.MotionMagicAcceleration = Constants.Shooter.topMaxAccel;
+        topMotionMagicConfig.MotionMagicCruiseVelocity = Constants.Shooter.topMaxVel;
+
+        topSlot0Config = new Slot0Configs();
+        topSlot0Config.kP = Constants.Shooter.topP;
+        topSlot0Config.kI = Constants.Shooter.topI;
+        topSlot0Config.kD = Constants.Shooter.topD;
+        topSlot0Config.kV = Constants.Shooter.topFF;
+
+        shooterBottomConfig = new TalonFXConfiguration();
+        shooterBottomConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        shooterBottomConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+        bottomSlot0Config = new Slot0Configs();
+        bottomSlot0Config.kP = Constants.Shooter.bottomP;
+        bottomSlot0Config.kI = Constants.Shooter.bottomI;
+        bottomSlot0Config.kD = Constants.Shooter.bottomD;
+        bottomSlot0Config.kV = Constants.Shooter.bottomFF;
+
+        BottomMotionMagicConfig = new MotionMagicConfigs();
+        BottomMotionMagicConfig.MotionMagicCruiseVelocity = Constants.Shooter.bottomMaxVel;
+        BottomMotionMagicConfig.MotionMagicAcceleration = Constants.Shooter.bottomMaxAccel;
+
+        shooterTop.getConfigurator().apply(shooterTopConfig);
+        shooterTop.getConfigurator().apply(topSlot0Config);
+        shooterTop.getConfigurator().apply(topMotionMagicConfig);
+
+        shooterBottom.getConfigurator().apply(shooterBottomConfig);
+        shooterBottom.getConfigurator().apply(bottomSlot0Config);
+        shooterBottom.getConfigurator().apply(BottomMotionMagicConfig);
+
+        feeder = new TalonFX(Constants.Shooter.feederCANID);
+        feederConfig = new TalonFXConfiguration();
+        feederConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        feederConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+        feederSlot0Config = new Slot0Configs();
+        feederSlot0Config.kP = Constants.Shooter.feederP;
+        feederSlot0Config.kI = Constants.Shooter.feederI;
+        feederSlot0Config.kD = Constants.Shooter.feederD;
+        feederSlot0Config.kV = Constants.Shooter.feederFF;
+
+        feederMotionMagicConfig = new MotionMagicConfigs();
+        feederMotionMagicConfig.MotionMagicAcceleration = Constants.Shooter.feederMaxAccel;
+        feederMotionMagicConfig.MotionMagicCruiseVelocity = Constants.Shooter.feederMaxVel;
+
+        feeder.getConfigurator().apply(feederConfig);
+        feeder.getConfigurator().apply(feederSlot0Config);
+        feeder.getConfigurator().apply(feederMotionMagicConfig);
+
+        positionMotor = new TalonFX(Constants.Shooter.positionCANID);
+        positionMotorConfig = new TalonFXConfiguration();
+        positionMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        positionMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+        positionSlot0Config = new Slot0Configs();
+        positionSlot0Config.kP = Constants.Shooter.positionP;
+        positionSlot0Config.kI = Constants.Shooter.positionI;
+        positionSlot0Config.kD = Constants.Shooter.positionD;
+        positionSlot0Config.kG = Constants.Shooter.positionG;
+        positionSlot0Config.kV = Constants.Shooter.positionV;
+        positionSlot0Config.kS = Constants.Shooter.positionS;
+
+        positionMotionMagicConfig = new MotionMagicConfigs();
+        positionMotionMagicConfig.MotionMagicCruiseVelocity = Constants.Shooter.maxVel;
+        positionMotionMagicConfig.MotionMagicAcceleration = Constants.Shooter.maxAcc;
+
+        absoluteEncoder = new DutyCycleEncoder(2, 1, 0.25);
+
+    }
+
+    @Override
+    public void periodic() {
+        if (!areEncodersSynced()) {
+            positionMotor.setPosition(absoluteEncoder.get());
+        }
+    }
+
+    public boolean areEncodersSynced() {
+        return positionMotor.getPosition().getValueAsDouble() < (absoluteEncoder.get() - 0.05)
+                || positionMotor.getPosition().getValueAsDouble() > (absoluteEncoder.get() + 0.05);
+    }
+
+}

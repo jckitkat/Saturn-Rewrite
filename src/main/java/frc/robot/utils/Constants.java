@@ -130,6 +130,15 @@ public class Constants {
         public static final double feederFF = 0;
 
         public static final double sensorThreshhold = 33;
+
+        public static final double topMaxVel = 100;
+        public static final double topMaxAccel = 200;
+
+        public static final double bottomMaxVel = 100;
+        public static final double bottomMaxAccel = 200;
+
+        public static final double feederMaxVel = 100;
+        public static final double feederMaxAccel = 200;
     }
 
     public static class Sensors {
