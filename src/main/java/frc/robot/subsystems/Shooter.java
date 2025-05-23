@@ -13,7 +13,9 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.utils.Constants;
 
 public class Shooter extends SubsystemBase {

@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -18,18 +19,22 @@ import frc.robot.subsystems.Drivetrain;
 // import frc.robot.subsystems.Shooter;
 // import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
 
-    private Command currentMode = Commands.none();
-    private Command currentDriveMode = Commands.none();
-    private Command previousMode = Commands.none();
-    private Command previousDriveMode = Commands.none();
+    private static Command currentMode = Commands.none();
+    private static Command currentDriveMode = Commands.none();
+    private static Command previousMode = Commands.none();
+    private static Command previousDriveMode = Commands.none();
 
     public static Intake intake = new Intake();
+    public static Shooter shooter = new Shooter();
+
+    public static XboxController controller = new XboxController(0);
 
     @Override
     public void robotInit() {
@@ -110,19 +115,19 @@ public class Robot extends TimedRobot {
     public void testExit() {
     }
 
-    public void setMode(Command newMode) {
+    public static void setMode(Command newMode) {
         currentMode.cancel();
         newMode.schedule();
         currentMode = newMode;
     }
 
-    public void setDriveMode(Command newDriveMode) {
+    public static void setDriveMode(Command newDriveMode) {
         currentDriveMode.cancel();
         newDriveMode.schedule();
         currentDriveMode = newDriveMode;
     }
 
-    public void returnToPreviousMode() {
+    public static void returnToPreviousMode() {
         currentMode.cancel();
         previousMode.schedule();
         Command temp = currentMode;
