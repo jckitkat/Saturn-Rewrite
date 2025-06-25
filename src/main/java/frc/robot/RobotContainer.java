@@ -50,6 +50,7 @@ import frc.robot.subsystems.Drivetrain;
 // import frc.robot.subsystems.Vision;
 // // import frc.robot.subsystems.Vision;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Modes;
 // import frc.robot.utils.PhotonNoteDetection;
 import frc.robot.utils.Constants.IO;
 
@@ -78,6 +79,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         configureBindings();
+        new Modes();
         drivetrain.setDefaultCommand(new TeleopDrive(
                 drivetrain,
                 () -> MathUtil.applyDeadband(-driver.getRawAxis(IO.driveXAxis), Constants.IO.swerveDeadband),

@@ -37,7 +37,7 @@ public class Intake extends SubsystemBase {
         leftPivotMotorConfig = new TalonFXConfiguration();
         leftPivotMotorConfig.Feedback.SensorToMechanismRatio = Constants.Intake.conversionFactor;
         leftPivotMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        leftPivotMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        leftPivotMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         pivotPID = new Slot0Configs();
         pivotPID.kP = Constants.Intake.positionP;
         pivotPID.kI = Constants.Intake.positionI;
@@ -63,22 +63,22 @@ public class Intake extends SubsystemBase {
         rollerConfig = new TalonFXConfiguration();
         rollerConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-        absoluteEncoder = new DutyCycleEncoder(1, 1, 0.23);
+        absoluteEncoder = new DutyCycleEncoder(1);
 
     }
 
     @Override
     public void periodic() {
         if (!areEncodersSynced()) {
-            leftPivotMotor.setPosition(absoluteEncoder.get());
+            leftPivotMotor.setPosition(getPivotAbsolutePosition());
         }
     }
 
     public boolean areEncodersSynced() {
-        return leftPivotMotor.getPosition()
-                .getValueAsDouble() < (absoluteEncoder.get() - Constants.Sensors.encoderTolerance)
+        return !(leftPivotMotor.getPosition()
+                .getValueAsDouble() < (getPivotAbsolutePosition() - Constants.Sensors.encoderTolerance)
                 || leftPivotMotor.getPosition()
-                        .getValueAsDouble() > (absoluteEncoder.get() + Constants.Sensors.encoderTolerance);
+                        .getValueAsDouble() > (getPivotAbsolutePosition() - Constants.Sensors.encoderTolerance));
     }
 
     public void setRollerSpeed(double speed) {
@@ -96,6 +96,10 @@ public class Intake extends SubsystemBase {
 
     public double getPivotPosition() {
         return leftPivotMotor.getPosition().getValueAsDouble();
+    }
+
+    public double getPivotAbsolutePosition() {
+        return absoluteEncoder.get() - Constants.Intake.absoluteOffset;
     }
 
     public boolean hasGamePiece() {

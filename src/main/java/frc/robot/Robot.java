@@ -20,6 +20,7 @@ import frc.robot.subsystems.Drivetrain;
 // import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.utils.Modes;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
@@ -89,8 +90,8 @@ public class Robot extends TimedRobot {
 
         // Vision.getInstance().turnOnAprilTags();
 
-        m_robotContainer.drivetrain.setHeadingCorrection(true);
         // m_robotContainer.shooter.moveTo(Shooter.PositionState.HANDOFF);
+        setMode(Modes.initialize);
     }
 
     @Override

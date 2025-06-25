@@ -1,8 +1,7 @@
 package frc.robot.utils;
 
-import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.Idle;
-
 import frc.robot.commands.modes.Initialize;
+import frc.robot.commands.states.Idle;
 
 public class Modes {
 

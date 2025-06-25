@@ -81,7 +81,7 @@ public class Shooter extends SubsystemBase {
         feeder = new TalonFX(Constants.Shooter.feederCANID);
         feederConfig = new TalonFXConfiguration();
         feederConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        feederConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        feederConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         feederSlot0Config = new Slot0Configs();
         feederSlot0Config.kP = Constants.Shooter.feederP;
@@ -99,7 +99,7 @@ public class Shooter extends SubsystemBase {
 
         positionMotor = new TalonFX(Constants.Shooter.positionCANID);
         positionMotorConfig = new TalonFXConfiguration();
-        positionMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        positionMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         positionMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         positionSlot0Config = new Slot0Configs();
@@ -118,22 +118,26 @@ public class Shooter extends SubsystemBase {
         positionMotor.getConfigurator().apply(positionSlot0Config);
         positionMotor.getConfigurator().apply(positionMotionMagicConfig);
 
-        absoluteEncoder = new DutyCycleEncoder(2, 1, 0.25);
+        absoluteEncoder = new DutyCycleEncoder(2);
 
     }
 
     @Override
     public void periodic() {
         if (!areEncodersSynced()) {
-            positionMotor.setPosition(absoluteEncoder.get());
+            positionMotor.setPosition(getAbsolutePosition());
         }
     }
 
     public boolean areEncodersSynced() {
-        return positionMotor.getPosition()
-                .getValueAsDouble() < (absoluteEncoder.get() - Constants.Sensors.encoderTolerance)
+        return !(positionMotor.getPosition()
+                .getValueAsDouble() < (getAbsolutePosition() - Constants.Sensors.encoderTolerance)
                 || positionMotor.getPosition()
-                        .getValueAsDouble() > (absoluteEncoder.get() + Constants.Sensors.encoderTolerance);
+                        .getValueAsDouble() > (getAbsolutePosition() + Constants.Sensors.encoderTolerance));
+    }
+
+    public double getAbsolutePosition() {
+        return -absoluteEncoder.get() - Constants.Shooter.absoluteOffset;
     }
 
     public void setPosition(double position) {

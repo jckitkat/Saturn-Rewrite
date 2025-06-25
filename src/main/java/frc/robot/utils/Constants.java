@@ -51,24 +51,24 @@ public class Constants {
     }
 
     public static class Intake {
-        public static final int leftPivotID = 13;
-        public static final int rightPivotID = 20;
-        public static final int rollerCANID = 14;
+        public static final int leftPivotID = 26;
+        public static final int rightPivotID = 25;
+        public static final int rollerCANID = 24;
 
         // public static final double conversionFactor = 0.19047619;
         public static final double conversionFactor = 23.3333333333333;
         public static final double absoluteConversionFactor = -1.0;
-        public static final double absoluteOffset = 0.43;
+        public static final double absoluteOffset = 0.437;
         // public static final double absoluteOffset = 0.0;
 
-        public static final double positionP = 7;
+        public static final double positionP = 45;
         public static final double positionI = 0;
         public static final double positionD = 0;
-        public static final double positionG = 0.37;
-        public static final double positionV = 2.5;
-        public static final double positionS = 0.07;
-        public static final double maxVel = 1;
-        public static final double maxAccel = 2;
+        public static final double positionG = 0.32;
+        public static final double positionV = 0;
+        public static final double positionS = 0.08;
+        public static final double maxVel = 20;
+        public static final double maxAccel = 50;
         public static final double openLoopRampRate = .5;
 
         public static final double defaultPosition = 1;
@@ -76,6 +76,8 @@ public class Constants {
         public static final double sensorThreshhold = 50;
 
         public static final double pivotTolerance = 0.01;
+
+        public static final double topPosition = 0.21;
     }
 
     public static class Elevator {
@@ -94,10 +96,10 @@ public class Constants {
     }
 
     public static class Shooter {
-        public static final int feederCANID = 17;
-        public static final int topCANID = 19;
-        public static final int bottomCANID = 18;
-        public static final int positionCANID = 16;
+        public static final int feederCANID = 21;
+        public static final int topCANID = 23;
+        public static final int bottomCANID = 22;
+        public static final int positionCANID = 20;
 
         public static final double topP = 0;
         public static final double topI = 0;
@@ -110,18 +112,18 @@ public class Constants {
         public static final double bottomFF = 0.117;
 
         // public static final double positionP = 0.004;
-        public static final double positionP = 30;
+        public static final double positionP = 20;
         public static final double positionI = 0;
         public static final double positionD = 0;
-        public static final double positionG = 0.38;
-        public static final double positionV = 2.5;
+        public static final double positionG = 0.31;
+        public static final double positionV = 1.4;
         // public static final double positionV = 0.0;
-        public static final double positionS = 0.4;
+        public static final double positionS = 0;
         public static final double conversionFactor = 44.1176471;
-        public static final double maxVel = 2;
-        public static final double maxAcc = 4;
+        public static final double maxVel = 30;
+        public static final double maxAcc = 60;
         // public static final double absoluteOffset = 0.49;
-        public static final double absoluteOffset = 1.04 - .166666;
+        public static final double absoluteOffset = -0.827;
         public static final double absoluteConversionFactor = 1.0;
 
         public static final double feederP = 0;
@@ -141,6 +143,8 @@ public class Constants {
         public static final double feederMaxAccel = 200;
 
         public static final double positionTolerance = 0.02;
+
+        public static final double stowPosition = 0;
     }
 
     public static class Sensors {
