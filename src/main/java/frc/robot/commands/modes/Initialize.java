@@ -3,7 +3,6 @@ package frc.robot.commands.modes;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-import frc.robot.commands.setMode;
 import frc.robot.commands.subsystemControl.intake.SetIntakePosition;
 import frc.robot.commands.subsystemControl.shooter.SetShooterPosition;
 import frc.robot.utils.Constants;

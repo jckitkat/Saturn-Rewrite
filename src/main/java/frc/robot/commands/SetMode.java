@@ -3,11 +3,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
-public class setMode extends Command {
+public class SetMode extends Command {
 
-    private final Command newMode;
+    private Command newMode;
 
-    public setMode(Command newMode) {
+    public SetMode(Command newMode) {
         this.newMode = newMode;
     }
 

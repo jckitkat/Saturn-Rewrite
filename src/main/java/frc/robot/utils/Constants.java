@@ -78,6 +78,7 @@ public class Constants {
         public static final double pivotTolerance = 0.01;
 
         public static final double topPosition = 0.21;
+        public static double groundPosition = 0;
     }
 
     public static class Elevator {
