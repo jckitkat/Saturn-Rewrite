@@ -24,4 +24,7 @@ public class TriggerBoard {
         return Robot.shooter.hasGamePiece();
     }
 
+    public static boolean shooterDoesntHasNote() {
+        return !Robot.shooter.hasGamePiece();
+    }
 }

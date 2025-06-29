@@ -13,8 +13,6 @@ import java.util.Map;
 
 public class SetupIdle extends SequentialCommandGroup {
 
-    private String targetIdleState = "normal";
-
     private Map<String, Command> commandMap = new HashMap<String, Command>();
 
     public SetupIdle() {
@@ -22,7 +20,6 @@ public class SetupIdle extends SequentialCommandGroup {
         commandMap.put("normal", normalCommand());
 
         addCommands(
-                new InstantCommand(this::selectTargetIdle),
                 new SelectCommand<String>(commandMap, this::selectTargetIdle),
                 new SetMode(Modes.idle)
         );
@@ -43,7 +40,7 @@ public class SetupIdle extends SequentialCommandGroup {
     }
 
     private String selectTargetIdle() {
-        if (TriggerBoard.shooterHasNote()) {
+        if (TriggerBoard.shooterHasNote() && !TriggerBoard.intakeHasNote()) {
             return "prepShoot";
         } else {
             return "normal";
