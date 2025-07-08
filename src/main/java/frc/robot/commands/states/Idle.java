@@ -26,8 +26,8 @@ public class Idle extends Command {
             }
             if (!TriggerBoard.intakeHasNote() && TriggerBoard.shooterHasNote()) {
                 Robot.setMode(Modes.prepareShoot);
+                return;
             }
-            return;
         }
     }
 

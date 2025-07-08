@@ -102,15 +102,15 @@ public class Constants {
         public static final int bottomCANID = 22;
         public static final int positionCANID = 20;
 
-        public static final double topP = 0;
+        public static final double topP = 0.25;
         public static final double topI = 0;
         public static final double topD = 0;
-        public static final double topFF = 0.177;
+        public static final double topFF = 0.13125;
 
-        public static final double bottomP = 0.0;
+        public static final double bottomP = 0.25;
         public static final double bottomI = 0;
         public static final double bottomD = 0;
-        public static final double bottomFF = 0.117;
+        public static final double bottomFF = 0.13125;
 
         // public static final double positionP = 0.004;
         public static final double positionP = 20;
@@ -127,10 +127,10 @@ public class Constants {
         public static final double absoluteOffset = -0.827;
         public static final double absoluteConversionFactor = 1.0;
 
-        public static final double feederP = 0;
+        public static final double feederP = 0.25;
         public static final double feederI = 0;
         public static final double feederD = 0;
-        public static final double feederFF = 0;
+        public static final double feederFF = 0.115;
 
         public static final double sensorThreshhold = 33;
 

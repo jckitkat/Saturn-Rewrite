@@ -25,5 +25,12 @@ public class Modes {
     public static void initCommands() {
         initialize = new Initialize();
         idle = new Idle();
+        setupIdle = new SetupIdle();
+        floorPickup = new FloorPickup();
+        floorIntake = new FloorIntake();
+        Handoff = new Handoff();
+        prepareShoot = new PrepareShoot();
+        shotReady = new ShotReady();
+        shoot = new Shoot();
     }
 }

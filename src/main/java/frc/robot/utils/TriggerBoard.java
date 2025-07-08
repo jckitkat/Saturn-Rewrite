@@ -9,7 +9,7 @@ public class TriggerBoard {
     }
 
     public static boolean isShootButtonPressed() {
-        return Robot.controller.getLeftBumperButton();
+        return Robot.controller.getRightBumperButtonPressed();
     }
 
     public static boolean isResetButtonPressed() {

@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -15,6 +16,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 
@@ -25,8 +27,8 @@ public class Intake extends SubsystemBase {
     private final TalonFX leftPivotMotor, rightPivotMotor;
     private final TalonFX rollerMotor;
     private final TalonFXConfiguration leftPivotMotorConfig, rightPivotMotorConfig, rollerConfig;
-    private final Slot0Configs pivotPID;
-    private final MotionMagicConfigs pivotMotionMagicConfig;
+    private final Slot0Configs pivotPID, rollerPID;
+    private final MotionMagicConfigs pivotMotionMagicConfig, rollerMotionMagicConfig;
     private final DutyCycleEncoder absoluteEncoder;
 
     private final AnalogInput analogSensor = new AnalogInput(3);
@@ -61,7 +63,19 @@ public class Intake extends SubsystemBase {
 
         rollerMotor = new TalonFX(Constants.Intake.rollerCANID);
         rollerConfig = new TalonFXConfiguration();
-        rollerConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        rollerConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
+        rollerMotionMagicConfig = new MotionMagicConfigs();
+        rollerMotionMagicConfig.MotionMagicCruiseVelocity = 80;
+        rollerMotionMagicConfig.MotionMagicAcceleration = 200;
+
+        rollerPID = new Slot0Configs();
+        rollerPID.kP = 0.3;
+        rollerPID.kV = 0.13;
+
+        rollerMotor.getConfigurator().apply(rollerConfig);
+        rollerMotor.getConfigurator().apply(rollerPID);
+        rollerMotor.getConfigurator().apply(rollerMotionMagicConfig);
 
         absoluteEncoder = new DutyCycleEncoder(1);
 
@@ -72,6 +86,9 @@ public class Intake extends SubsystemBase {
         if (!areEncodersSynced()) {
             leftPivotMotor.setPosition(getPivotAbsolutePosition());
         }
+        SmartDashboard.putBoolean("Intake/Has Note", hasGamePiece());
+        SmartDashboard.putNumber("Intake/AnalogSensor",  analogSensor.getValue());
+        SmartDashboard.putBoolean("Intake/is at position", isAtPosition());
     }
 
     public boolean areEncodersSynced() {
@@ -82,7 +99,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void setRollerSpeed(double speed) {
-        rollerMotor.set(speed);
+        rollerMotor.setControl(new MotionMagicVelocityVoltage(speed));
     }
 
     public void setPivotPosition(double position) {
@@ -103,7 +120,7 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean hasGamePiece() {
-        return (analogSensor.getValue() > 2700) || !digitalSensor.get();
+        return (analogSensor.getValue() < 3200) || !digitalSensor.get();
     }
 
 }

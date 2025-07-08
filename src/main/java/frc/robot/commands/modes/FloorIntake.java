@@ -13,8 +13,7 @@ public class FloorIntake extends SequentialCommandGroup {
     public FloorIntake() {
         addCommands(
                 new SetIntakePosition(Constants.Intake.groundPosition),
-                new SetRollerSpeed(20),
-                new WaitUntilCommand(TriggerBoard::intakeHasNote),
+                new SetRollerSpeed(10),
                 new SetMode(Modes.floorPickup)
         );
     }
